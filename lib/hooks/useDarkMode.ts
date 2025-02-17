@@ -1,30 +1,28 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
+import { useSignal } from '@preact/signals';
 
 export function useDarkMode() {
-  const [darkMode, setDarkMode] = useState(false);
+  const darkMode = useSignal(false);
 
   useEffect(() => {
     const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setDarkMode(prefersDarkMode);
+    darkMode.value = prefersDarkMode;
 
     const mediaQueryListener = (event: MediaQueryListEvent) => {
-      setDarkMode(event.matches);
+      darkMode.value = event.matches;
     };
 
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', mediaQueryListener);
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', mediaQueryListener);
 
     return () => {
-      window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', mediaQueryListener);
+      mediaQuery.removeEventListener('change', mediaQueryListener);
     };
-  },);
+  }, []);
 
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.style.colorScheme = 'dark';
-    } else {
-      document.documentElement.style.colorScheme = 'light';
-    }
-  }, [darkMode]);
+    document.documentElement.style.colorScheme = darkMode.value ? 'dark' : 'light';
+  }, [darkMode.value]);
 
   return darkMode;
 }
