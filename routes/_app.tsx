@@ -2,11 +2,17 @@ import { PageProps } from 'fresh/server.ts';
 
 import { FreshContextState } from '/lib/types.ts';
 import { defaultDescription, defaultTitle } from '/lib/utils/misc.ts';
+import { useDarkMode } from '../lib/hooks/useDarkMode.ts';
 import Header from '/components/Header.tsx';
 
 interface Data {}
 
+
+
 export default function App({ route, Component, state }: PageProps<Data, FreshContextState>) {
+
+  const isDarkMode = useDarkMode();
+  
   return (
     <html class='h-full bg-slate-800'>
       <head>
