@@ -2,27 +2,27 @@ import { useEffect } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 
 export function useDarkMode() {
-  const darkMode = useSignal(false);
+  const darkMode = useSignal(
+    window.matchMedia('(prefers-color-scheme: dark)').matches,
+  );
 
   useEffect(() => {
-    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    darkMode.value = prefersDarkMode;
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    const mediaQueryListener = (event: MediaQueryListEvent) => {
+    const updateMode = (event: MediaQueryListEvent) => {
       darkMode.value = event.matches;
+      document.documentElement.dataset.theme = darkMode.value ? 'dark' : 'light';
     };
 
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    mediaQuery.addEventListener('change', mediaQueryListener);
+    mediaQuery.addEventListener('change', updateMode);
+
+    // Set initial theme attribute
+    document.documentElement.dataset.theme = darkMode.value ? 'dark' : 'light';
 
     return () => {
-      mediaQuery.removeEventListener('change', mediaQueryListener);
+      mediaQuery.removeEventListener('change', updateMode);
     };
   }, []);
-
-  useEffect(() => {
-    document.documentElement.style.colorScheme = darkMode.value ? 'dark' : 'light';
-  }, [darkMode.value]);
 
   return darkMode;
 }
