@@ -39,6 +39,7 @@ import * as $photos from './routes/photos.tsx';
 import * as $photos_thumbnail_fileName_ from './routes/photos/thumbnail/[fileName].tsx';
 import * as $settings from './routes/settings.tsx';
 import * as $signup from './routes/signup.tsx';
+import * as $DarkModeToggle from './islands/DarkModeToggle.tsx';
 import * as $Settings from './islands/Settings.tsx';
 import * as $dashboard_Links from './islands/dashboard/Links.tsx';
 import * as $dashboard_Notes from './islands/dashboard/Notes.tsx';
@@ -91,6 +92,7 @@ const manifest = {
     './routes/signup.tsx': $signup,
   },
   islands: {
+    './islands/DarkModeToggle.tsx': $DarkModeToggle,
     './islands/Settings.tsx': $Settings,
     './islands/dashboard/Links.tsx': $dashboard_Links,
     './islands/dashboard/Notes.tsx': $dashboard_Notes,
